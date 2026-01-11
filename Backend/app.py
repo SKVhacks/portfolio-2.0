@@ -30,6 +30,8 @@ def send_mail(msg):
 @app.route("/send-email", methods=["POST"])
 def send_email():
     data = request.json
+    if not EMAIL or not PASSWORD:
+        return jsonify({"error":"EMAIL_USER or EMAIL_PASS environment variables not set"}),400
 
     # 🔐 Verify reCAPTCHA
     # if not verify_recaptcha(data.get("recaptchaToken")):
@@ -85,4 +87,5 @@ def send_email():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
