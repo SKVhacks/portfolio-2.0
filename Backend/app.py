@@ -6,14 +6,14 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-EMAIL = os.getenv("EMAIL_USER")
-PASSWORD = os.getenv("EMAIL_PASS")
-RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
+
+
 @app.route("/")
 def home():
     return "Backend is running!"
     
 def verify_recaptcha(token):
+    RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
     url = "https://www.google.com/recaptcha/api/siteverify"
     payload = {
         "secret": RECAPTCHA_SECRET,
@@ -23,6 +23,8 @@ def verify_recaptcha(token):
     return r.json().get("success", False)
 
 def send_mail(msg):
+    EMAIL = os.getenv("EMAIL_USER")
+    PASSWORD = os.getenv("EMAIL_PASS")
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(EMAIL, PASSWORD)
         smtp.send_message(msg)
@@ -30,6 +32,9 @@ def send_mail(msg):
 @app.route("/send-email", methods=["POST"])
 def send_email():
     data = request.json
+    EMAIL = os.getenv("EMAIL_USER")
+    PASSWORD = os.getenv("EMAIL_PASS")
+    RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
     if not EMAIL or not PASSWORD:
         return jsonify({"error":"EMAIL_USER or EMAIL_PASS environment variables not set"}),400
 
@@ -87,5 +92,6 @@ def send_email():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
