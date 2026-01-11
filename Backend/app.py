@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import smtplib, os, requests
 from email.message import EmailMessage
-
+import os
 app = Flask(__name__)
 CORS(app)
 
@@ -10,6 +10,9 @@ EMAIL = os.getenv("EMAIL_USER")
 PASSWORD = os.getenv("EMAIL_PASS")
 RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
 
+def home():
+    return "Backend is running!"
+    
 def verify_recaptcha(token):
     url = "https://www.google.com/recaptcha/api/siteverify"
     payload = {
@@ -79,3 +82,6 @@ def send_email():
     send_mail(reply_msg)
 
     return jsonify({"success": True})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
