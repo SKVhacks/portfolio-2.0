@@ -9,7 +9,7 @@ CORS(app)
 EMAIL = os.getenv("EMAIL_USER")
 PASSWORD = os.getenv("EMAIL_PASS")
 RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
-
+@app.route("/")
 def home():
     return "Backend is running!"
     
@@ -85,3 +85,4 @@ def send_email():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
